@@ -8,5 +8,6 @@
         {{ review_form.as_p }}
         {% csrf_token %}
         <button type="submit">Envoyer</button>
+        <a href="{% url 'HomePage' %}"><button>Retour</button></a>
     </form>
 {% endblock %}

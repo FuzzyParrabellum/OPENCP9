@@ -1,6 +1,7 @@
 header {
-    border:3px solid red;
+    border:3px solid yellow;
     display:flex;
+    justify-content: space-around;
 }
 section {
     border: 3px solid white;
@@ -19,8 +20,9 @@ section {
 }
 
 #header-banner {
-    display: inline-flex;
-    justify-content: center;
+    display: inline-block;
+    justify-items: space-between;
+    border:3px solid green;
 }
 
 #main-title {
@@ -29,7 +31,9 @@ section {
 }
 
 .menu {
-    display: inline-flex;
+    /* display: inline-flex;  */
+    justify-items: space-between;
+    border:3px solid yellow;
 }
 
 #main-homepage {

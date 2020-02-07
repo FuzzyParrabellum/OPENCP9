@@ -9,6 +9,12 @@
 </head>
 <header>
     <h1 id="main-title">LITReview</h1>
+    <span class="user">
+        {% if request.user.is_authenticated %}
+            Bonjour {{ request.user.first_name }},
+            <a href="{% url "logout" %}">Se Déconnecter</a>
+        {% endif %}
+    </span>
     <div id="header-banner">
         {% if request.user.is_authenticated %}
             <ul class="menu">
@@ -28,12 +34,7 @@
             {% else %}
                 <a>Utilisateur non connecté</a>
         {% endif %}
-        <span class="user">
-            {% if request.user.is_authenticated %}
-                Bonjour {{ request.user.first_name }},
-                <a href="{% url "logout" %}">Se Déconnecter</a>
-            {% endif %}
-        </span>
+        
     </div>
 </header>
 <body>
