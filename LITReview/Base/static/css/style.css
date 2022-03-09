@@ -1,0 +1,20 @@
+header {
+    border:3px solid white;
+    display:flex;
+    justify-content: center;
+}
+section {
+    border: 3px solid white;
+    display: inline-flex;
+    width: 49%;
+    height: 50%;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+}
+
+#connect-button {
+    display: inline-flex;
+    justify-content: end;
+    border: 3px solid blue;
+}
