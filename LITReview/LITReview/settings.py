@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Base',
-    'LITReview'
+    'LITReview',
+    'LoginLogout'
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,11 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGIN_REDIRECT_URL = 'Homepage'
+LOGIN_URL = 'LoginOrInscription'
+# Logout à compléter
+# LOGOUT_URL = 'LoginOrInscription'
 
 WSGI_APPLICATION = 'LITReview.wsgi.application'
 

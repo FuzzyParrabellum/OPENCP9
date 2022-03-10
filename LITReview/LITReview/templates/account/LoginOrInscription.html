@@ -1,0 +1,23 @@
+{% extends "Base.html" %}
+
+{% block content %}
+
+    <section id="BlockConnexion">
+        <div>
+            <h1>Inscrivez-vous maintenant</h1>
+            <button>S'inscrire</button>
+        </div>
+    </section>
+    <section id="BlockInscription">
+        <div><h1>Connectez-vous</h1>
+            <div>
+                <form method="post">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" id="connect-button" value="Se connecter"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

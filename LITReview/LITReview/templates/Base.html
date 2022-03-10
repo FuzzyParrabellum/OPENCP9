@@ -9,9 +9,37 @@
 </head>
 <header>
     <h1>LITReview</h1>
+    {% if request.user.is_authenticated %}
+        <ul class="menu">
+            <li {% if section == "HomePage" %}class="selected"{% endif %}>
+                <a href="{% url "HomePage" %}">Page D'acceuil</a>
+            </li>
+            <!-- <li {% if section == "Feed" %}class="selected"{% endif %}>
+                <a href="#">Flux</a>
+            </li>
+            <li {% if section == "Posts" %}class="selected"{% endif %}>
+                <a href="#">Posts</a>
+            </li>
+            <li {% if section == "Subscriptions" %}class="selected"{% endif %}>
+                <a href="#">Abonnements</a>
+            </li> -->
+        </ul>
+        {% else %}
+            <a>Utilisateur non connecté</a>
+    {% endif %}
+    <span class="user">
+        {% if request.user.is_authenticated %}
+            Bonjour {{ request.user.first_name }},
+            <a href="{% url "logout" %}">Se Déconnecter</a>
+        {% endif %}
+    </span>
 </header>
 <body>
     {% block content %}
     {% endblock %}
 </body>
 </html>
+
+
+    
+    
