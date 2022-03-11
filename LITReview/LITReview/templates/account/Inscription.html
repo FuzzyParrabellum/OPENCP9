@@ -1,0 +1,23 @@
+{% extends "Base.html" %}
+
+{% block content %}
+
+   <section>
+       <div>
+           <h1>Inscrivez-vous</h1>
+           <div>
+               <form method="post">
+                    {{ user_form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" value="S'inscrire"></p>
+               </form>
+                <!-- <button>Nom d'utilisateur</button>
+                <button>Mot de passe</button>
+                <button>Confirmer mot de passe</button> -->
+            </div>
+            <a href="{% url "LoginOrInscription" %}"><button>Retourner au menu</button></a>
+            <!-- <button>S'inscrire</button> -->
+        </div>
+   </section>
+    
+{% endblock %}

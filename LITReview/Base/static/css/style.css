@@ -1,7 +1,6 @@
 header {
-    border:3px solid white;
+    border:3px solid red;
     display:flex;
-    justify-content: center;
 }
 section {
     border: 3px solid white;
@@ -17,4 +16,18 @@ section {
     display: inline-flex;
     justify-content: end;
     border: 3px solid blue;
+}
+
+#header-banner {
+    display: inline-flex;
+    justify-content: center;
+}
+
+#main-title {
+    display: inline-flex;
+    justify-content: right;
+}
+
+.menu {
+    display: inline-flex;
 }
