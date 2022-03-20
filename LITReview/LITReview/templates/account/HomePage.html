@@ -2,6 +2,21 @@
 
 {% block content %}
     <h2>Profile</h2>
+    <div id="main-homepage">
+        <section id="critics-buttons">
+            <a href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
+            <a><button>Créer une critique</button></a>
+        </section>
+        <section id="rolling-feed">
+            <h2>Tickets</h2>
+            {% for ticket in tickets %}
+                <p>{{ ticket.title }}</p>
+                <img src="{{ ticket.image.url }}">
+                <p>{{ ticket.description }}</p>
+            {% endfor %}
+
+        </section>
+    </div>
     <div>
         <p>
             Username: {{ request.user.username }} <br>

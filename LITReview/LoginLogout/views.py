@@ -36,8 +36,8 @@ def Inscription(request):
             new_user.save()
             form = LoginForm()
             # login et logout en-dessous A AMELIORER, N'EST PAS OPTIMAL, mais permet d'éviter bug
-            login(request, new_user)
-            logout(request)
+            # login(request, new_user)
+            # logout(request)
             return render(request, 'account/LoginOrInscription.html', {'form': form, 'section': 'LoginOrInscription'})
     else:
         user_form = InscriptionForm()

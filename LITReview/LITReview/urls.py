@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from Base import views as b_views
 from LoginLogout import views as l_views
@@ -24,6 +26,9 @@ urlpatterns = [path('accounts/', include(('django.contrib.auth.urls', 'auth'), n
     path('admin/', admin.site.urls),
     path('', l_views.LoginOrInscription, name='LoginOrInscription'),
     path('inscription/', l_views.Inscription, name='Inscription'),
-    path('logout', l_views.logout_request, name='logout', )
-    
+    path('logout', l_views.logout_request, name='logout', ),
+    path('ticket_creation/', b_views.ticket_upload, name='ticket_creation')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
