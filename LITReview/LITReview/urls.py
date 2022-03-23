@@ -27,7 +27,8 @@ urlpatterns = [path('accounts/', include(('django.contrib.auth.urls', 'auth'), n
     path('', l_views.LoginOrInscription, name='LoginOrInscription'),
     path('inscription/', l_views.Inscription, name='Inscription'),
     path('logout', l_views.logout_request, name='logout', ),
-    path('ticket_creation/', b_views.ticket_upload, name='ticket_creation')
+    path('ticket_creation/', b_views.ticket_upload, name='ticket_creation'),
+    path('review_and_ticket_creation/', b_views.review_and_ticket_upload, name='review_and_ticket_creation')
 ]
 
 if settings.DEBUG:

@@ -38,11 +38,31 @@ def ticket_upload(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
-            # doit quelque part trouver comment identifier l'utilisateur et le relier à la photo
             ticket.save()
             return redirect('HomePage')
     return render(request, 'critics/ticket_creation.html', context={'form': form})
 
+@login_required
+def review_and_ticket_upload(request):
+    review_form = forms.ReviewForm
+    ticket_form = forms.TicketForm
+    if request.method == 'POST':
+        review_form = forms.ReviewForm(request.POST)
+        ticket_form = forms.TicketForm(request.POST, request.FILES)
+        if any(review_form.is_valid(), ticket_form.is_valid()):
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            review = review_form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('HomePage')
+    context = {
+        'review_form': review_form,
+        'ticket_form': ticket_form
+    }
+    return render(request, 'critics/review_and_ticket_creation.html', context=context)
 
 # Premier jet brouillon écriture de vues
 # def MySubscriptionsView(request):
