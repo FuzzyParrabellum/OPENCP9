@@ -1,0 +1,31 @@
+{% extends "Base.html" %}
+
+{% block content %}
+    <h2>Suivre d'autres utilisateurs</h2>
+    <div>
+
+    </div>
+    <h2>Abonnements</h2>
+    <div>
+        <section>
+            <div>
+            {% for user in users %}
+                {% if user != request.user %}
+                    <p>{{user.username}}<button>S'abonner</button></p> 
+                {% endif %}
+                <!-- le if ci-dessus permet d'éviter que notre user actuel apparaisse dans la liste -->
+                <!-- en cliquant sur ce bouton la page se recharge avec 
+                ce nouvel utilisateur que notre utilisateur actuel suit -->
+                <!-- peut ici intégrer la logique que si le request.user follow déjà cet utilisateur,alors le bouton
+                indiquera plutôt "se désabonner" -->
+                <!-- également intégrer logique de défilement des utilisateurs quand il y en a plus de 10 si peux -->
+            {% endfor %}
+            </div>
+        </section>
+    <h2>Abonnés</h2>
+    <div>
+
+    </div>
+        {{ request.user.username }}
+    </div>
+{% endblock %}

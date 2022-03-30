@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 # TEST 
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 from . import models, forms
@@ -64,6 +65,11 @@ def review_and_ticket_upload(request):
     }
     return render(request, 'critics/review_and_ticket_creation.html', context=context)
 
+
+@login_required
+def subscribers_page(request):
+    users = User.objects.all()
+    return render(request, 'subscribers_page.html', context={'users':users})
 # Premier jet brouillon écriture de vues
 # def MySubscriptionsView(request):
 #     return None

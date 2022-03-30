@@ -19,7 +19,7 @@
         {% if request.user.is_authenticated %}
             <ul class="menu">
                 <li {% if section == "HomePage" %}class="selected"{% endif %}>
-                    <a href="{% url "HomePage" %}">Page D'acceuil</a>
+                    <a href="{% url 'HomePage' %}">Page D'acceuil</a>
                 </li>
                 <li {% if section == "Feed" %}class="selected"{% endif %}>
                     <a href="#">Flux</a>
@@ -28,7 +28,7 @@
                     <a href="#">Posts</a>
                 </li>
                 <li {% if section == "Subscriptions" %}class="selected"{% endif %}>
-                    <a href="#">Abonnements</a>
+                    <a href="{% url 'subscribers_page' %}">Abonnements</a>
                 </li>
             </ul>
             {% else %}
