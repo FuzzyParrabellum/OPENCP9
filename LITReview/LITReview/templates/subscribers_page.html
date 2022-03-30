@@ -10,8 +10,20 @@
         <section>
             <div>
             {% for user in users %}
-                {% if user != request.user %}
-                    <p>{{user.username}}<button>S'abonner</button></p> 
+                {% if user not in followed_group %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_to_follow" value="{{user.id}}" readonly/>
+                        <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
+                        <p>{{user.username}}<button type="submit">S'abonner</button></p> 
+                    </form>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_to_unfollow" value="{{user.id}}" readonly/>
+                        <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
+                        <p>{{user.username}}<button type="submit">Se Désabonner</button></p> 
+                    </form>
                 {% endif %}
                 <!-- le if ci-dessus permet d'éviter que notre user actuel apparaisse dans la liste -->
                 <!-- en cliquant sur ce bouton la page se recharge avec 
@@ -22,9 +34,18 @@
             {% endfor %}
             </div>
         </section>
+        <div>
+            <h1>Section test user_to</h1>
+            {% for subscriber_test in user_to %}
+                <p>{{subscriber_test.followed_user}}</p>
+            {% endfor %}
+            <p>{{touche}}</p>
+        </div>
     <h2>Abonnés</h2>
     <div>
-
+        {% for subscriber_test in to_user %}
+                <p>{{subscriber_test.user}}</p>
+            {% endfor %}
     </div>
         {{ request.user.username }}
     </div>

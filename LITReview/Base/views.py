@@ -68,8 +68,37 @@ def review_and_ticket_upload(request):
 
 @login_required
 def subscribers_page(request):
-    users = User.objects.all()
-    return render(request, 'subscribers_page.html', context={'users':users})
+    # la ligne ci-dessous permet de récupérer une liste de tous les utilisateurs SAUF l'utilisateur connecté actuel
+    users = User.objects.exclude(id = request.user.id)
+    # ceci est un test pour voir si on peut bien séparer les users abonnés et non abonnés avec bout de code
+    test_user = request.user
+    user_to = test_user.following.all()
+    to_user = test_user.followed_by.all()
+    followed_group = [followed.followed_user for followed in user_to]
+    
+    if request.method == 'POST':
+        # on vérifie ci-dessous si la requête POST nous demande de follow ou d'unfollo un utilisateur
+        
+        if request.POST.get('user_to_follow', ''):
+            user_to_follow_id = request.POST['user_to_follow']
+            user_to_follow = User.objects.get(id=user_to_follow_id)
+            current_user_id = request.POST['current_user']
+            current_user = User.objects.get(id=current_user_id)
+            models.UserFollows.objects.create(user=current_user, 
+                                        followed_user=user_to_follow)
+        else:
+            user_to_unfollow_id = request.POST['user_to_unfollow']
+            user_to_unfollow = User.objects.get(id=user_to_unfollow_id)
+            current_user_id = request.POST['current_user']
+            current_user = User.objects.get(id=current_user_id)
+            follow_relation = models.UserFollows.objects.filter(user=current_user).filter(followed_user=user_to_unfollow)
+            follow_relation.delete()
+        return redirect('subscribers_page')
+    return render(request, 'subscribers_page.html', context={'users':users, 'user_to':user_to, 'to_user':to_user,
+                                                                'followed_group':followed_group})
+
+
+
 # Premier jet brouillon écriture de vues
 # def MySubscriptionsView(request):
 #     return None
