@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.contrib import messages
 
 from . import models, forms
 # def welcome_view(request):
@@ -77,23 +77,51 @@ def subscribers_page(request):
     followed_group = [followed.followed_user for followed in user_to]
     
     if request.method == 'POST':
-        # on vérifie ci-dessous si la requête POST nous demande de follow ou d'unfollo un utilisateur
+        # on vérifie ci-dessous si la requête POST nous demande de follow ou d'unfollow un utilisateur
         
         if request.POST.get('user_to_follow', ''):
-            user_to_follow_id = request.POST['user_to_follow']
-            user_to_follow = User.objects.get(id=user_to_follow_id)
-            current_user_id = request.POST['current_user']
-            current_user = User.objects.get(id=current_user_id)
-            models.UserFollows.objects.create(user=current_user, 
-                                        followed_user=user_to_follow)
-        else:
+            user_to_follow_username = request.POST['user_to_follow']
+            print(f"USER TO FOLLOW USERNAME EST {user_to_follow_username}")
+            # on vérifie ci-dessous que l'utilisateur recherché existe bien
+            try:
+                # en fait essayer d'englober dans ce bloc try except les blocs if et else juste ne dessous, ça peut marcher
+                user_to_follow = User.objects.get(username=user_to_follow_username)
+            except:
+                user_to_follow=None
+
+            print(f"USER TO FOLLOW EST {user_to_follow}")
+            if user_to_follow:
+                current_user_id = request.POST['current_user']
+                current_user = User.objects.get(id=current_user_id)
+                # on vérifie ci-dessous que l'utilisateur n'est pas déjà dans la liste d'abonnements
+                if models.UserFollows.objects.filter(user=current_user).filter(followed_user=user_to_follow):
+                    # cad si notre utilisateur suit déjà l'utilisateur qu'on veut suivre
+                    messages.error(request, "Cet utilisateur est déjà dans votre liste d'abonnements")
+                else:
+                    print("CHOIX 1")
+                    
+                    models.UserFollows.objects.create(user=current_user, 
+                                                followed_user=user_to_follow)
+                    messages.success(request, "L'utilisateur a bien été ajouté à la liste des abonnements")
+            
+            else:
+                print("CHOIX 2")
+                messages.error(request, "Aucun utilisateur possédant ce nom n'existe")
+
+        elif request.POST.get('user_to_unfollow', ''):
+            print("...LE ELSE EST APPELE DIRECTEMENT...")
             user_to_unfollow_id = request.POST['user_to_unfollow']
             user_to_unfollow = User.objects.get(id=user_to_unfollow_id)
             current_user_id = request.POST['current_user']
             current_user = User.objects.get(id=current_user_id)
             follow_relation = models.UserFollows.objects.filter(user=current_user).filter(followed_user=user_to_unfollow)
             follow_relation.delete()
+
+        else:
+            print("CHOIX 3")
+            messages.error(request, "Veuillez renseigner un nom d'utilisateur")
         return redirect('subscribers_page')
+
     return render(request, 'subscribers_page.html', context={'users':users, 'user_to':user_to, 'to_user':to_user,
                                                                 'followed_group':followed_group})
 

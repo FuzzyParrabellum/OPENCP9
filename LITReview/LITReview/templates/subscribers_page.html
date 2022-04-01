@@ -1,23 +1,30 @@
 {% extends "Base.html" %}
 
 {% block content %}
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+            {{ message|safe }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     <h2>Suivre d'autres utilisateurs</h2>
     <div>
-
+        <form method="POST">
+            {% csrf_token %}
+            <input id="user-search" type="text" name="user_to_follow" placeholder="Nom D'utilisateur...">
+            <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
+            <button type="submit">Envoyer</button>
+        </form>
     </div>
     <h2>Abonnements</h2>
     <div>
         <section>
             <div>
             {% for user in users %}
-                {% if user not in followed_group %}
-                    <form method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="user_to_follow" value="{{user.id}}" readonly/>
-                        <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
-                        <p>{{user.username}}<button type="submit">S'abonner</button></p> 
-                    </form>
-                {% else %}
+                {% if user in followed_group %}
                     <form method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="user_to_unfollow" value="{{user.id}}" readonly/>
