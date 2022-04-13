@@ -25,9 +25,31 @@ def InscriptionView(request):
 
 @login_required
 def HomePage(request):
-    tickets = models.Ticket.objects.all()
+    # le code ci-dessous devrait afficher tous les tickets de l'utilisateur actuel
+    # il faudrait également pouvoir afficher ses reviews et les tickets et reviews
+    # des utilisateurs qu'il suit
+    current_user = request.user
+    followed_w_userfollows = models.UserFollows.objects.filter(user=current_user)
+    followed_users = User.objects.filter(following=followed_w_userfollows)
+    
+    # own_tickets = models.Ticket.objects.filter(user_id=request.user.id)
+    # subscribed_tickets = models.Ticket.objects.filter(user_id=request.user.followed_user)
+    # tickets = models.Ticket.objects.filter(user__in=followed_users)
+    tickets = models.Ticket.objects.filter(user__following=current_user)
     # Il faut également que je puisse faire en sorte que l'on affiche uniquement les tickets et critiques appartenant
     # à l'utilisateur et pas plus
+    if request.method == 'POST':
+        ticket_id = request.POST['current_ticket_id']
+        # ici la logique pour modifier un ticket
+
+        # là la logique pour supprimer un ticket
+
+
+        # c'est ici que va pouvoir supprimer ou modifier les critiques ou reviews
+        # avec la méthode post
+        # doit pour cela terminer de modif le code de HomePage.html
+        return redirect("HomePage")
+
     return render(request,
         'account/HomePage.html', context={'tickets': tickets, 'section': 'HomePage'})
 
@@ -81,7 +103,6 @@ def subscribers_page(request):
         
         if request.POST.get('user_to_follow', ''):
             user_to_follow_username = request.POST['user_to_follow']
-            print(f"USER TO FOLLOW USERNAME EST {user_to_follow_username}")
             # on vérifie ci-dessous que l'utilisateur recherché existe bien
             try:
                 # en fait essayer d'englober dans ce bloc try except les blocs if et else juste ne dessous, ça peut marcher
@@ -89,7 +110,6 @@ def subscribers_page(request):
             except:
                 user_to_follow=None
 
-            print(f"USER TO FOLLOW EST {user_to_follow}")
             if user_to_follow:
                 current_user_id = request.POST['current_user']
                 current_user = User.objects.get(id=current_user_id)
@@ -97,19 +117,15 @@ def subscribers_page(request):
                 if models.UserFollows.objects.filter(user=current_user).filter(followed_user=user_to_follow):
                     # cad si notre utilisateur suit déjà l'utilisateur qu'on veut suivre
                     messages.error(request, "Cet utilisateur est déjà dans votre liste d'abonnements")
-                else:
-                    print("CHOIX 1")
-                    
+                else:                    
                     models.UserFollows.objects.create(user=current_user, 
                                                 followed_user=user_to_follow)
                     messages.success(request, "L'utilisateur a bien été ajouté à la liste des abonnements")
             
             else:
-                print("CHOIX 2")
                 messages.error(request, "Aucun utilisateur possédant ce nom n'existe")
 
         elif request.POST.get('user_to_unfollow', ''):
-            print("...LE ELSE EST APPELE DIRECTEMENT...")
             user_to_unfollow_id = request.POST['user_to_unfollow']
             user_to_unfollow = User.objects.get(id=user_to_unfollow_id)
             current_user_id = request.POST['current_user']
@@ -118,7 +134,6 @@ def subscribers_page(request):
             follow_relation.delete()
 
         else:
-            print("CHOIX 3")
             messages.error(request, "Veuillez renseigner un nom d'utilisateur")
         return redirect('subscribers_page')
 

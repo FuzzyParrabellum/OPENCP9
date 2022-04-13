@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, InscriptionForm
+
+from Base import models
 # Create your views here.
 
 def LoginOrInscription(request):
@@ -14,7 +16,9 @@ def LoginOrInscription(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                return render(request, "account/HomePage.html", {'section': 'HomePage'})
+                tickets = models.Ticket.objects.all().filter(user_id=request.user.id)
+                return render(request, "account/HomePage.html", {'section': 'HomePage',\
+                                                                 'tickets': tickets})
             else:
                 return HttpResponse('Disabled account')
         else:

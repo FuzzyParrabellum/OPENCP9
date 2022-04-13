@@ -11,8 +11,15 @@
             <h2>Tickets</h2>
             {% for ticket in tickets %}
                 <p>{{ ticket.title }}</p>
-                <img src="{{ ticket.image.url }}">
+                <form method="POST">
+                    <button type="submit">Supprimer le ticket</button>
+                    <button type="submit">Modifier le ticket</button>
+                    <input type="hidden" name="current_ticket_id" value="{{ ticket.id }}" readonly/>
+                </form>
                 <p>{{ ticket.description }}</p>
+                <img src="{{ ticket.image.url }}">
+                
+                
             {% endfor %}
 
         </section>

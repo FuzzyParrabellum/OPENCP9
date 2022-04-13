@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.fields.files import ImageField
 
+from PIL import Image
+
 # exemple tuto openclassrooms
 # class Image(models.Model):
 #     image = models.ImageField()
@@ -11,12 +13,24 @@ from django.db.models.fields.files import ImageField
 #     date_created = models.DateTimeField(auto_now_add=True)
 
 class Ticket(models.Model):
+
+    IMG_MAX_SIZE = (200,200)
+
     title = models.CharField(max_length=128, verbose_name="Titre")
     description = models.TextField(max_length=2048, blank=True)
     user = models.ForeignKey(\
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = ImageField(null=True, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
+
+    def resize_img(self):
+        image = Image.open(self.image)
+        image.thumbnail(self.IMG_MAX_SIZE)
+        image.save(self.image.path)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.resize_img()
 
 
 class Review(models.Model):
