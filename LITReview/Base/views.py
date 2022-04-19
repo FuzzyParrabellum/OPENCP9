@@ -28,26 +28,44 @@ def HomePage(request):
     # le code ci-dessous devrait afficher tous les tickets de l'utilisateur actuel
     # il faudrait également pouvoir afficher ses reviews et les tickets et reviews
     # des utilisateurs qu'il suit
-    current_user = request.user
-    followed_w_userfollows = models.UserFollows.objects.filter(user=current_user)
-    followed_users = User.objects.filter(following=followed_w_userfollows)
     
+    # LE CODE CI-DESSOUS = TESTS
+    # followed_w_userfollows = models.UserFollows.objects.filter(user=current_user)
+    # followed_users = User.objects.filter(following=followed_w_userfollows)
     # own_tickets = models.Ticket.objects.filter(user_id=request.user.id)
     # subscribed_tickets = models.Ticket.objects.filter(user_id=request.user.followed_user)
-    # tickets = models.Ticket.objects.filter(user__in=followed_users)
-    tickets = models.Ticket.objects.filter(user__following=current_user)
+    
+    current_user = request.user
+    # pour l'instant on ne récupère que les tickets des utilisateurs qu'on suit
+    # doit également pouvoir récupérer:
+    # -ses propres posts
+    # -ses propres critiques (en fait dès qu'il y a une critique et qu'on a sa date 
+    # de création, il faut la mettre avec le ticket qu'elle critique et le supprimer
+    # des résultats à afficher en même temps, comme ça on est toujours à jour)
+    # -les critiques de ceux qu'on suit
+    # -le tout ordonné selon la date de création ou plutôt de modification du post
+    subscribed_tickets = models.Ticket.objects.filter(user__followed_by__user=current_user)
+    current_user_tickets = models.Ticket.objects.filter(user=current_user)
+    tickets = subscribed_tickets.union(current_user_tickets)
     # Il faut également que je puisse faire en sorte que l'on affiche uniquement les tickets et critiques appartenant
     # à l'utilisateur et pas plus
     if request.method == 'POST':
         ticket_id = request.POST['current_ticket_id']
         # ici la logique pour modifier un ticket
-
+        if request.POST.get('ticket_to_remove', ''):
         # là la logique pour supprimer un ticket
+            ticket_to_remove = models.Ticket.objects.get(id=ticket_id)
+            ticket_to_remove.delete()
+            messages.success(request, 
+            "Le ticket a bien été supprimé de la base de données.")
+            return redirect("HomePage")
+            
+        if request.POST.get('ticket_to_remove', ''):
+            print("IL Y A BIEN UN TICKET TO MODIFY")
+            ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
+            print(f"LE TICKET A MODIFY A POUR ID {ticket_id}")
+            return redirect("HomePage")
 
-
-        # c'est ici que va pouvoir supprimer ou modifier les critiques ou reviews
-        # avec la méthode post
-        # doit pour cela terminer de modif le code de HomePage.html
         return redirect("HomePage")
 
     return render(request,
@@ -125,7 +143,7 @@ def subscribers_page(request):
             else:
                 messages.error(request, "Aucun utilisateur possédant ce nom n'existe")
 
-        elif request.POST.get('user_to_unfollow', ''):
+        elif request.POST.get('us</div>er_to_unfollow', ''):
             user_to_unfollow_id = request.POST['user_to_unfollow']
             user_to_unfollow = User.objects.get(id=user_to_unfollow_id)
             current_user_id = request.POST['current_user']

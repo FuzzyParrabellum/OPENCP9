@@ -8,8 +8,12 @@ class TicketForm(forms.ModelForm):
         model = models.Ticket
         fields = ['title', 'description', 'image']
 
+RATINGS = [('1','1'), ('2', '2'), ('3','3'), ('4','4'), ('5','5')]
+
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = models.Review
         fields = ['headline', 'rating', 'body']
-        widgets = {'rating': forms.RadioSelect}
+        widgets = {
+            'rating': forms.RadioSelect(choices=RATINGS)
+            }

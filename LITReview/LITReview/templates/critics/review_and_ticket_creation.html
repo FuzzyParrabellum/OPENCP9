@@ -4,8 +4,14 @@
     <h2>Créer une critique et un ticket</h2>
     
     <form method="post" enctype="multipart/form-data">
-        {{ ticket_form.as_p }}
-        {{ review_form.as_p }}
+        <div class="ticket">
+            <h3>Création du Ticket</h3>
+            {{ ticket_form.as_p }}
+        </div>
+        <div class='review'>
+            <h3>Création de la Critique du Ticket</h3>
+            {{ review_form.as_p }}
+        </div>
         {% csrf_token %}
         <button type="submit">Envoyer</button>
         <a href="{% url 'HomePage' %}"><button>Retour</button></a>

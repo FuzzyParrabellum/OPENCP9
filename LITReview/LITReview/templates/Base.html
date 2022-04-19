@@ -5,13 +5,14 @@
 <head>
     <meta charset='utf-8'>
     <title>LITReview</title>
-    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/style.css'%}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/style.css'%}?20181209">
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href="/static/css/style.css?{% now 'U' %}"> -->
 </head>
 <header>
     <h1 id="main-title">LITReview</h1>
     <span class="user">
         {% if request.user.is_authenticated %}
-            Bonjour {{ request.user.first_name }},
+            Bonjour {{ request.user.username }},
             <a href="{% url "logout" %}">Se Déconnecter</a>
         {% endif %}
     </span>
@@ -38,6 +39,15 @@
     </div>
 </header>
 <body>
+    {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                {{ message|safe }}
+                </li>
+            {% endfor %}
+            </ul>
+    {% endif %}
     {% block content %}
     {% endblock %}
 </body>

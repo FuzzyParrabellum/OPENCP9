@@ -4,20 +4,28 @@
     <h2>Profile</h2>
     <div id="main-homepage">
         <section id="critics-buttons">
-            <a href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
-            <a href="{% url 'review_and_ticket_creation' %}"><button>Créer une critique</button></a>
+            <div>
+                <a href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
+                <a href="{% url 'review_and_ticket_creation' %}"><button>Créer une critique</button></a>
+            </div>
         </section>
         <section id="rolling-feed">
             <h2>Tickets</h2>
             {% for ticket in tickets %}
+            <div class="ticket">
                 <p>{{ ticket.title }}</p>
-                <form method="POST">
-                    <button type="submit">Supprimer le ticket</button>
-                    <button type="submit">Modifier le ticket</button>
-                    <input type="hidden" name="current_ticket_id" value="{{ ticket.id }}" readonly/>
-                </form>
+                {% if ticket.user == request.user %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="ticket_to_remove" value="{{ ticket.id }}">Supprimer le ticket</button>
+                        <button type="submit" name="ticket_to_modify" value="{{ ticket.id }}">Modifier le ticket</button>
+                        <input type="hidden" name="current_ticket_id" value="{{ ticket.id }}" readonly/>
+                    </form>
+                {% endif %}
                 <p>{{ ticket.description }}</p>
+                <p>Ticket posté par {{ticket.user.username}} le {{ticket.time_created}}</p>
                 <img src="{{ ticket.image.url }}">
+            </div>
                 
                 
             {% endfor %}
