@@ -15,5 +15,6 @@ class ReviewForm(forms.ModelForm):
         model = models.Review
         fields = ['headline', 'rating', 'body']
         widgets = {
-            'rating': forms.RadioSelect(choices=RATINGS)
+            'rating': forms.RadioSelect(choices=RATINGS),
+            'body' : forms.Textarea
             }

@@ -1,0 +1,19 @@
+{% extends "Base.html" %}
+
+{% block content %}
+    <h2>Créer une critique d'un ticket</h2>
+    <h3>Vous êtes en train de poster une réponse à </h3>
+    <div class="ticket">
+        
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        
+        <div class='review'>
+            <h3>Création de la Critique du Ticket</h3>
+            {{ review_form.as_p }}
+        </div>
+        {% csrf_token %}
+        <button type="submit">Envoyer</button>
+        <a href="{% url 'HomePage' %}"><button>Retour</button></a>
+    </form>
+{% endblock %}

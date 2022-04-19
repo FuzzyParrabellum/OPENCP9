@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from itertools import chain
+from django.db.models import CharField, Value
 
 from . import models, forms
+
 # def welcome_view(request):
 #     message = f'<html><h1>Welcome to LITReview !</h1></html>'
 #     return HttpResponse(message)
@@ -45,8 +48,24 @@ def HomePage(request):
     # -les critiques de ceux qu'on suit
     # -le tout ordonné selon la date de création ou plutôt de modification du post
     subscribed_tickets = models.Ticket.objects.filter(user__followed_by__user=current_user)
+    subscribed_tickets = subscribed_tickets.annotate(content_type=Value('TICKET', CharField()))
     current_user_tickets = models.Ticket.objects.filter(user=current_user)
+    current_user_tickets = current_user_tickets.annotate(content_type=Value('TICKET', CharField()))
     tickets = subscribed_tickets.union(current_user_tickets)
+    q = tickets
+    for ticket in tickets:
+        if models.Review.objects.filter(ticket=ticket):
+            print(f"Il  a bien une review au ticket n°{ticket.id}")
+            reviews = models.Review.objects.filter(ticket=ticket)
+            reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+            q = chain(q, reviews)
+    posts = sorted(
+        q,
+        key= lambda post: post.time_created,
+        reverse=True
+    )
+    # q.order_by('time_created')
+    
     # Il faut également que je puisse faire en sorte que l'on affiche uniquement les tickets et critiques appartenant
     # à l'utilisateur et pas plus
     if request.method == 'POST':
@@ -60,7 +79,7 @@ def HomePage(request):
             "Le ticket a bien été supprimé de la base de données.")
             return redirect("HomePage")
             
-        if request.POST.get('ticket_to_remove', ''):
+        if request.POST.get('ticket_to_modify', ''):
             print("IL Y A BIEN UN TICKET TO MODIFY")
             ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
             print(f"LE TICKET A MODIFY A POUR ID {ticket_id}")
@@ -69,7 +88,7 @@ def HomePage(request):
         return redirect("HomePage")
 
     return render(request,
-        'account/HomePage.html', context={'tickets': tickets, 'section': 'HomePage'})
+        'account/HomePage.html', context={'posts': posts, 'section': 'HomePage'})
 
 @login_required
 def ticket_upload(request):
@@ -84,13 +103,27 @@ def ticket_upload(request):
     return render(request, 'critics/ticket_creation.html', context={'form': form})
 
 @login_required
+def review_upload(request):
+    form = forms.ReviewForm()
+    if request.method == 'POST':
+        form = forms.ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            # review.ticket = 
+            review.user = request.user
+            review.save()
+            return redirect('HomePage')
+    return render(request, 'critics/review_creation.html', context={'form': form})
+
+
+@login_required
 def review_and_ticket_upload(request):
     review_form = forms.ReviewForm
     ticket_form = forms.TicketForm
     if request.method == 'POST':
         review_form = forms.ReviewForm(request.POST)
         ticket_form = forms.TicketForm(request.POST, request.FILES)
-        if any(review_form.is_valid(), ticket_form.is_valid()):
+        if review_form.is_valid() and ticket_form.is_valid():
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
             ticket.save()

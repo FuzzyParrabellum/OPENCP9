@@ -11,21 +11,36 @@
         </section>
         <section id="rolling-feed">
             <h2>Tickets</h2>
-            {% for ticket in tickets %}
-            <div class="ticket">
-                <p>{{ ticket.title }}</p>
-                {% if ticket.user == request.user %}
-                    <form method="POST">
-                        {% csrf_token %}
-                        <button type="submit" name="ticket_to_remove" value="{{ ticket.id }}">Supprimer le ticket</button>
-                        <button type="submit" name="ticket_to_modify" value="{{ ticket.id }}">Modifier le ticket</button>
-                        <input type="hidden" name="current_ticket_id" value="{{ ticket.id }}" readonly/>
-                    </form>
+            {% for post in posts %}
+                {% if post.content_type == 'TICKET' %}
+                    <div class="ticket">
+                        <p>{{ post.title }}</p>
+                        {% if post.user == request.user %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="ticket_to_remove" value="{{ post.id }}">Supprimer le ticket</button>
+                                <button type="submit" name="ticket_to_modify" value="{{ post.id }}">Modifier le ticket</button>
+                                <input type="hidden" name="current_ticket_id" value="{{ post.id }}" readonly/>
+                            </form>
+                        {% endif %}
+                        <p>{{ post.description }}</p>
+                        <p>Ticket posté par {{post.user.username}} le {{post.time_created}}</p>
+                        <img src="{{ post.image.url }}">
+                        <a href="{% url 'review_creation' %}"><button>Demander une critique</button></a>
+                    </div>
+                {% elif post.content_type == 'REVIEW' %}
+                    <div class="review">
+                        <p>{{ post.headline }}</p>
+                        <p>{{ post.rating }}</p>
+                        <p>{{ post.body }}</p>
+                        <div class="ticket">
+                            <p>{{ post.ticket.title }}</p>
+                            <p>{{ post.ticket.description }}</p>
+                            <p>Ticket posté par {{post.ticket.user.username}} le {{post.ticket.time_created}}</p>
+                            <img src="{{ post.ticket.image.url }}">
+                        </div>
+                    </div>
                 {% endif %}
-                <p>{{ ticket.description }}</p>
-                <p>Ticket posté par {{ticket.user.username}} le {{ticket.time_created}}</p>
-                <img src="{{ ticket.image.url }}">
-            </div>
                 
                 
             {% endfor %}
