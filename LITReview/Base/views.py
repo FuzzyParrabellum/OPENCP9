@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 
-# TEST 
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,21 +9,6 @@ from django.db.models import CharField, Value
 
 from . import models, forms
 
-# def welcome_view(request):
-#     message = f'<html><h1>Welcome to LITReview !</h1></html>'
-#     return HttpResponse(message)
-
-# FIN DU TEST
-
-# Create your views here.
-# def LoginOrInscription(request):
-#     return render(request, "LoginOrInscription.html")
-
-def InscriptionView(request):
-    return None
-
-# def HomePage(request):
-#     return render(request, 'HomePage.html')
 
 @login_required
 def HomePage(request):
@@ -103,17 +87,20 @@ def ticket_upload(request):
     return render(request, 'critics/ticket_creation.html', context={'form': form})
 
 @login_required
-def review_upload(request):
+def review_upload(request, ticket_id):
     form = forms.ReviewForm()
+    ticket = models.Ticket.objects.get(id=ticket_id)
+    print(f'THE TICKET ID {ticket.id}')
     if request.method == 'POST':
         form = forms.ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            # review.ticket = 
+            review.ticket = ticket
             review.user = request.user
             review.save()
             return redirect('HomePage')
-    return render(request, 'critics/review_creation.html', context={'form': form})
+    return render(request, 'critics/review_creation.html', context={'form': form,
+                                                                    'ticket': ticket})
 
 
 @login_required
@@ -193,21 +180,4 @@ def subscribers_page(request):
 
 
 
-# Premier jet brouillon écriture de vues
-# def MySubscriptionsView(request):
-#     return None
-
-# def TicketCreation(request):
-#     # Il faut aussi pouvoir modifier un ticket
-#     return None
-
-# def TicketView(request):
-#     return None
-
-# def CriticCreation(request):
-#     # Il faut aussi pouvoir mofidier une critique
-#     return None
-
-# def CriticView(request):
-#     return None
 

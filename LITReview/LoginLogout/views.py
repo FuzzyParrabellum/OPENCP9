@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, InscriptionForm
@@ -16,9 +16,8 @@ def LoginOrInscription(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                tickets = models.Ticket.objects.all().filter(user_id=request.user.id)
-                return render(request, "account/HomePage.html", {'section': 'HomePage',\
-                                                                 'tickets': tickets})
+                # tickets = models.Ticket.objects.all().filter(user_id=request.user.id)
+                return redirect('HomePage')
             else:
                 return HttpResponse('Disabled account')
         else:

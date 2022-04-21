@@ -26,7 +26,7 @@
                         <p>{{ post.description }}</p>
                         <p>Ticket posté par {{post.user.username}} le {{post.time_created}}</p>
                         <img src="{{ post.image.url }}">
-                        <a href="{% url 'review_creation' %}"><button>Demander une critique</button></a>
+                        <a href="{% url 'review_creation' ticket_id=post.id %}"><button>Demander une critique</button></a>
                     </div>
                 {% elif post.content_type == 'REVIEW' %}
                     <div class="review">
