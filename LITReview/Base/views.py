@@ -15,22 +15,9 @@ def HomePage(request):
     # le code ci-dessous devrait afficher tous les tickets de l'utilisateur actuel
     # il faudrait également pouvoir afficher ses reviews et les tickets et reviews
     # des utilisateurs qu'il suit
-    
-    # LE CODE CI-DESSOUS = TESTS
-    # followed_w_userfollows = models.UserFollows.objects.filter(user=current_user)
-    # followed_users = User.objects.filter(following=followed_w_userfollows)
-    # own_tickets = models.Ticket.objects.filter(user_id=request.user.id)
-    # subscribed_tickets = models.Ticket.objects.filter(user_id=request.user.followed_user)
-    
+
     current_user = request.user
-    # pour l'instant on ne récupère que les tickets des utilisateurs qu'on suit
-    # doit également pouvoir récupérer:
-    # -ses propres posts
-    # -ses propres critiques (en fait dès qu'il y a une critique et qu'on a sa date 
-    # de création, il faut la mettre avec le ticket qu'elle critique et le supprimer
-    # des résultats à afficher en même temps, comme ça on est toujours à jour)
-    # -les critiques de ceux qu'on suit
-    # -le tout ordonné selon la date de création ou plutôt de modification du post
+
     subscribed_tickets = models.Ticket.objects.filter(user__followed_by__user=current_user)
     subscribed_tickets = subscribed_tickets.annotate(content_type=Value('TICKET', CharField()))
     current_user_tickets = models.Ticket.objects.filter(user=current_user)
@@ -50,27 +37,6 @@ def HomePage(request):
     )
     # q.order_by('time_created')
     
-    # Il faut également que je puisse faire en sorte que l'on affiche uniquement les tickets et critiques appartenant
-    # à l'utilisateur et pas plus
-    if request.method == 'POST':
-        ticket_id = request.POST['current_ticket_id']
-        # ici la logique pour modifier un ticket
-        if request.POST.get('ticket_to_remove', ''):
-        # là la logique pour supprimer un ticket
-            ticket_to_remove = models.Ticket.objects.get(id=ticket_id)
-            ticket_to_remove.delete()
-            messages.success(request, 
-            "Le ticket a bien été supprimé de la base de données.")
-            return redirect("HomePage")
-            
-        if request.POST.get('ticket_to_modify', ''):
-            print("IL Y A BIEN UN TICKET TO MODIFY")
-            ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
-            print(f"LE TICKET A MODIFY A POUR ID {ticket_id}")
-            return redirect("HomePage")
-
-        return redirect("HomePage")
-
     return render(request,
         'account/HomePage.html', context={'posts': posts, 'section': 'HomePage'})
 
@@ -178,6 +144,88 @@ def subscribers_page(request):
     return render(request, 'subscribers_page.html', context={'users':users, 'user_to':user_to, 'to_user':to_user,
                                                                 'followed_group':followed_group})
 
+@login_required
+def own_posts(request):
+    # code tiré de la view de HomePage
+    current_user = request.user
+    tickets = models.Ticket.objects.filter(user=current_user)
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    reviews = models.Review.objects.filter(user=current_user)
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    posts = chain(tickets, reviews)
+    
+    posts = sorted(
+        posts,
+        key= lambda post: post.time_created,
+        reverse=True
+    )
 
+    if request.method == 'POST':
+        try :
+            ticket_id = request.POST['current_ticket_id']
+            # ici la logique pour modifier un ticket
+            if request.POST.get('ticket_to_remove', ''):
+            # là la logique pour supprimer un ticket
+                ticket_to_remove = models.Ticket.objects.get(id=ticket_id)
+                ticket_to_remove.delete()
+                messages.success(request, 
+                "Le ticket a bien été supprimé de la base de données.")
+                return redirect("own_posts")
+                
+            # if request.POST.get('ticket_to_modify', ''):
+            #     print("IL Y A BIEN UN TICKET TO MODIFY")
+            #     ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
+            #     print(f"LE TICKET A MODIFY A POUR ID {ticket_id}")
+            #     return redirect("own_posts")
 
+        except :
+            review_id = request.POST['current_review_id']
+            print(f"REVIEW ID EST BIEN DE {review_id}")
+            if request.POST.get('review_to_remove', ''):
+            # là la logique pour supprimer un ticket
+                review_to_remove = models.Review.objects.get(id=review_id)
+                review_to_remove.delete()
+                messages.success(request, 
+                "La review a bien été supprimé de la base de données.")
+                return redirect("own_posts")
+            # if request.POST.get('review_to_modify', ''):
+            #     review_to_modify = models.Review.objects.get(id=review_id)
+                
+            #     return render(request, 'review_modification.html', \
+            #         context={'review_id': review_id})
+        return redirect("own_posts")
+    return render(request, 'own_posts.html', context={'posts': posts,\
+                                                        'section': 'Posts'})
 
+@login_required
+def ticket_modification(request, ticket_id):
+    ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
+    
+    if request.method == 'POST':
+        form = forms.TicketForm(request.POST, request.FILES, \
+            instance=ticket_to_modify)
+        if form.is_valid():
+            form.save()
+            return redirect('own_posts')
+
+    else:
+        form = forms.TicketForm(instance=ticket_to_modify)
+
+    return render(request, 'critics/ticket_creation.html', context={'form': form})
+
+@login_required
+def review_modification(request, review_id):
+    review_to_modify = models.Review.objects.get(id=review_id)
+    ticket = review_to_modify.ticket
+    
+    if request.method == 'POST':
+        form = forms.ReviewForm(request.POST, instance=review_to_modify)
+        if form.is_valid():
+            form.save()
+            return redirect('own_posts')
+
+    else:
+        form = forms.ReviewForm(instance=review_to_modify)
+
+    return render(request, 'critics/review_modification.html', \
+        context={'form':form, 'ticket': ticket})

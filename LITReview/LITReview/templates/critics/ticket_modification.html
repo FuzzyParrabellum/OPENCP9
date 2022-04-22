@@ -1,0 +1,14 @@
+{% extends "Base.html" %}
+
+{% block content %}
+    <h2>Modifier un ticket</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Envoyer</button>
+        <a href="{% url 'HomePage' %}"><button>Retour</button></a>
+    </form>
+
+
+{% endblock %}

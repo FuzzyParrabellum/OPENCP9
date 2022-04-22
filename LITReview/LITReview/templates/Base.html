@@ -26,7 +26,7 @@
                     <a href="#">Flux</a>
                 </li>
                 <li {% if section == "Posts" %}class="selected"{% endif %}>
-                    <a href="#">Posts</a>
+                    <a href="{% url 'own_posts' %}">Posts</a>
                 </li>
                 <li {% if section == "Subscriptions" %}class="selected"{% endif %}>
                     <a href="{% url 'subscribers_page' %}">Abonnements</a>

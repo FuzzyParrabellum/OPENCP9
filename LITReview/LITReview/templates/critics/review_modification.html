@@ -1,0 +1,22 @@
+{% extends "Base.html" %}
+
+{% block content %}
+    <h2>Modifier la critique d'un ticket</h2>
+    <h3>Vous êtes en train de modifier votre réponse à </h3>
+    <div class="ticket">
+        <p>{{ ticket.title }}</p>
+        <p>{{ ticket.description }}</p>
+        <p>Ticket posté par {{ticket.user.username}} le {{ticket.time_created}}</p>
+        <img src="{{ ticket.image.url }}">
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        
+        <div class='review'>
+            <h3>Modification de la Critique du Ticket</h3>
+            {{ form.as_p }}
+        </div>
+        {% csrf_token %}
+        <button type="submit">Envoyer</button>
+        <a href="{% url 'HomePage' %}"><button>Retour</button></a>
+    </form>
+{% endblock %}
