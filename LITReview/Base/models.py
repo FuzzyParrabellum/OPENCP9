@@ -5,13 +5,6 @@ from django.db.models.fields.files import ImageField
 
 from PIL import Image
 
-# exemple tuto openclassrooms
-# class Image(models.Model):
-#     image = models.ImageField()
-#     caption = models.CharField(max_length=128, blank=True)
-#     uploader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     date_created = models.DateTimeField(auto_now_add=True)
-
 class Ticket(models.Model):
 
     IMG_MAX_SIZE = (200,200)

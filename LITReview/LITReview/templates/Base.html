@@ -20,10 +20,7 @@
         {% if request.user.is_authenticated %}
             <ul class="menu">
                 <li {% if section == "HomePage" %}class="selected"{% endif %}>
-                    <a href="{% url 'HomePage' %}">Page D'acceuil</a>
-                </li>
-                <li {% if section == "Feed" %}class="selected"{% endif %}>
-                    <a href="#">Flux</a>
+                    <a href="{% url 'HomePage' %}">Flux</a>
                 </li>
                 <li {% if section == "Posts" %}class="selected"{% endif %}>
                     <a href="{% url 'own_posts' %}">Posts</a>

@@ -172,11 +172,6 @@ def own_posts(request):
                 "Le ticket a bien été supprimé de la base de données.")
                 return redirect("own_posts")
                 
-            # if request.POST.get('ticket_to_modify', ''):
-            #     print("IL Y A BIEN UN TICKET TO MODIFY")
-            #     ticket_to_modify = models.Ticket.objects.get(id=ticket_id)
-            #     print(f"LE TICKET A MODIFY A POUR ID {ticket_id}")
-            #     return redirect("own_posts")
 
         except :
             review_id = request.POST['current_review_id']
@@ -188,11 +183,7 @@ def own_posts(request):
                 messages.success(request, 
                 "La review a bien été supprimé de la base de données.")
                 return redirect("own_posts")
-            # if request.POST.get('review_to_modify', ''):
-            #     review_to_modify = models.Review.objects.get(id=review_id)
-                
-            #     return render(request, 'review_modification.html', \
-            #         context={'review_id': review_id})
+
         return redirect("own_posts")
     return render(request, 'own_posts.html', context={'posts': posts,\
                                                         'section': 'Posts'})

@@ -1,15 +1,6 @@
 {% extends "Base.html" %}
 
 {% block content %}
-    <!-- {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li class="{{ message.tags }}">
-            {{ message|safe }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% endif %} -->
     <h2>Suivre d'autres utilisateurs</h2>
     <div>
         <form method="POST">
@@ -41,13 +32,13 @@
             {% endfor %}
             </div>
         </section>
-        <div>
+        <!-- <div>
             <h1>Section test user_to</h1>
             {% for subscriber_test in user_to %}
                 <p>{{subscriber_test.followed_user}}</p>
             {% endfor %}
             <p>{{touche}}</p>
-        </div>
+        </div> -->
     <h2>Abonnés</h2>
     <div>
         {% for subscriber_test in to_user %}
