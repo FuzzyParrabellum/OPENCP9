@@ -129,7 +129,7 @@ def subscribers_page(request):
             else:
                 messages.error(request, "Aucun utilisateur possédant ce nom n'existe")
 
-        elif request.POST.get('us</div>er_to_unfollow', ''):
+        elif request.POST.get('user_to_unfollow', ''):
             user_to_unfollow_id = request.POST['user_to_unfollow']
             user_to_unfollow = User.objects.get(id=user_to_unfollow_id)
             current_user_id = request.POST['current_user']
