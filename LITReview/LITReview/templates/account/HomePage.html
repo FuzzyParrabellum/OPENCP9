@@ -1,16 +1,15 @@
 {% extends "Base.html" %}
 
 {% block content %}
-    <h2>Profile</h2>
     <div id="main-homepage">
-        <section id="critics-buttons">
-            <div>
-                <a href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
-                <a href="{% url 'review_and_ticket_creation' %}"><button>Créer une critique</button></a>
-            </div>
-        </section>
+        
         <section id="rolling-feed">
-            <h2>Tickets</h2>
+            <section >
+                <div >
+                    <a id="critics-buttons" href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
+                    <a id="critics-buttons" href="{% url 'review_and_ticket_creation' %}"><button>Créer une critique</button></a>
+                </div>
+            </section>
             {% for post in posts %}
                 {% if post.content_type == 'TICKET' %}
                     <div class="ticket">
@@ -18,7 +17,7 @@
                         <p>{{ post.description }}</p>
                         <p>Ticket posté par {{post.user.username}} le {{post.time_created}}</p>
                         <img src="{{ post.image.url }}">
-                        <a href="{% url 'review_creation' ticket_id=post.id %}"><button>Demander une critique</button></a>
+                        <a href="{% url 'review_creation' ticket_id=post.id %}"><button>Créer une critique</button></a>
                     </div>
                 {% elif post.content_type == 'REVIEW' %}
                     <div class="review">

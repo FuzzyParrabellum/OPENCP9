@@ -3,7 +3,17 @@ header {
     display:flex;
     justify-content: space-around;
 }
-section {
+/* section {
+    border: 3px solid white;
+    display: inline-flex;
+    width: 49%;
+    height: 50%;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+} */
+
+.AuthentificationSection{
     border: 3px solid white;
     display: inline-flex;
     width: 49%;
@@ -63,7 +73,6 @@ section {
 #connect-button {
     display: flex;
     float: right;
-    border: 3px solid blue;
 }
 
 /* #connect-button {
@@ -91,10 +100,21 @@ section {
 }
 
 #main-homepage {
-    display:inline-flex;
+    display:flex;
+    align-items: center;
+    justify-content: center;
     /* justify-content: center; */
     border: 5px solid purple;
+    margin: 0 auto;
     fill:blue;
+}
+
+#critics-buttons{
+    display: inline-block;
+    position: relative;
+    justify-content: center;
+    justify-items:center;
+    margin: 10px 30px;
 }
 
 .clearfix::after {
