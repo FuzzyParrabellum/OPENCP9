@@ -2,15 +2,18 @@ from django import forms
 from django.contrib.auth.models import User
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label="Nom d'Utilisateur")
-    password = forms.CharField(label="Mot de Passe", widget=forms.PasswordInput)
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': "Nom d'utilisateur", \
+                                                                'style': 'text-align: center;width: 400px'}))
+    password = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': "Mot de Passe", \
+                                                                'style': 'text-align: center;width: 400px'}))
 
 class InscriptionForm(forms.ModelForm):
-    username = forms.CharField(label="Nom d'Utilisateur")
-    password1 = forms.CharField(label="Mot de Passe",
-                                widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Confirmation Mot de Passe",
-                                widget=forms.PasswordInput)
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': "Nom d'utilisateur", \
+                                                                'style': 'text-align: center;width: 400px'}))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': "Mot de Passe", \
+                                                                'style': 'text-align: center;width: 400px'}))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': "Confirmer Mot de Passe", \
+                                                                'style': 'text-align: center;width: 400px'}))
 
     class Meta:
         model = User

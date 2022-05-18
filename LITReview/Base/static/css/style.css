@@ -3,7 +3,7 @@ header {
     display:flex;
     justify-content: space-around;
 }
-/* section {
+section {
     border: 3px solid white;
     display: inline-flex;
     width: 49%;
@@ -11,13 +11,67 @@ header {
     justify-content: center;
     align-content: center;
     position: relative;
+}
+
+#InscriptionSection{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+    width: 49%;
+    margin: 0 auto;
+}
+
+#BlockInscription{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+#InscriptionForm{
+    width: 100%;
+    
+}
+
+.float_bottom_right{
+    float: right;
+    padding: 5px;
+    /* align-items: flex-end; */
+}
+
+#backToMenu{
+    margin-top: 20px;;
+}
+/* #id_username{
+    width:200%;
+} */
+/* #ConnexionForm{
+    
+    
 } */
 
+#BlockConnexion{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #connect-button {
-    display: inline-flex;
-    justify-content: end;
+    display: flex;
+    float: right;
     border: 3px solid blue;
 }
+
+/* #connect-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 3px solid blue;
+} */
 
 #header-banner {
     display: inline-block;

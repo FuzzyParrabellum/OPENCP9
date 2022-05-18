@@ -2,22 +2,24 @@
 
 {% block content %}
 
-   <section>
-       <div>
+   <div id="InscriptionSection">
+       <div id="BlockInscription">
            <h1>Inscrivez-vous</h1>
            <div>
-               <form method="post">
+               <form id="InscriptionForm" method="post">
                     {{ user_form.as_p }}
                     {% csrf_token %}
-                    <p><input type="submit" value="S'inscrire"></p>
+                    <p class="float_bottom_right"><input type="submit" value="S'inscrire"></p>
+                    
                </form>
+               <a class="float_bottom_right" id="backToMenu" href="{% url "LoginOrInscription" %}"><button>Retourner au menu</button></a>
                 <!-- <button>Nom d'utilisateur</button>
                 <button>Mot de passe</button>
                 <button>Confirmer mot de passe</button> -->
             </div>
-            <a href="{% url "LoginOrInscription" %}"><button>Retourner au menu</button></a>
+            <!-- <a href="{% url "LoginOrInscription" %}"><button>Retourner au menu</button></a> -->
             <!-- <button>S'inscrire</button> -->
         </div>
-   </section>
+    </div>
     
 {% endblock %}
