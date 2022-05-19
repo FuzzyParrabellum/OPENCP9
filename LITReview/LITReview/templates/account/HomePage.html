@@ -5,9 +5,9 @@
         
         <section id="rolling-feed">
             <section >
-                <div >
-                    <a id="critics-buttons" href="{% url 'ticket_creation' %}"><button>Demander une critique</button></a>
-                    <a id="critics-buttons" href="{% url 'review_and_ticket_creation' %}"><button>Créer une critique</button></a>
+                <div id="critics-buttons-wrapper">
+                    <a id="critics-buttons" href="{% url 'ticket_creation' %}"><button id="critics-buttons2">Demander une critique</button></a>
+                    <a id="critics-buttons" href="{% url 'review_and_ticket_creation' %}"><button id="critics-buttons2">Créer une critique</button></a>
                 </div>
             </section>
             {% for post in posts %}
@@ -21,8 +21,8 @@
                     </div>
                 {% elif post.content_type == 'REVIEW' %}
                     <div class="review">
-                        <p>{{ post.headline }}</p>
-                        <p>{{ post.rating }}</p>
+                        <p>Critique postée par {{post.user.username}}</p>
+                        <p>{{ post.headline }} - {{ post.rating }} étoile(s)</p>
                         <p>{{ post.body }}</p>
                         <div class="ticket">
                             <p>{{ post.ticket.title }}</p>

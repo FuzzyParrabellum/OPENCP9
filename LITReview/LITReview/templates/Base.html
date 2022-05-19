@@ -12,22 +12,25 @@
     <h1 id="main-title">LITReview</h1>
     <span class="user">
         {% if request.user.is_authenticated %}
-            Bonjour {{ request.user.username }},
-            <a href="{% url "logout" %}">Se Déconnecter</a>
+            <!-- Bonjour {{ request.user.username }} ! -->
+            <!-- <a href="{% url "logout" %}">Se Déconnecter</a> -->
         {% endif %}
     </span>
     <div id="header-banner">
         {% if request.user.is_authenticated %}
             <ul class="menu">
-                <li {% if section == "HomePage" %}class="selected"{% endif %}>
+                <ul {% if section == "HomePage" %}class="selected"{% endif %}>
                     <a href="{% url 'HomePage' %}">Flux</a>
-                </li>
-                <li {% if section == "Posts" %}class="selected"{% endif %}>
+                </ul>
+                <ul {% if section == "Posts" %}class="selected"{% endif %}>
                     <a href="{% url 'own_posts' %}">Posts</a>
-                </li>
-                <li {% if section == "Subscriptions" %}class="selected"{% endif %}>
+                </ul>
+                <ul {% if section == "Subscriptions" %}class="selected"{% endif %}>
                     <a href="{% url 'subscribers_page' %}">Abonnements</a>
-                </li>
+                </ul>
+                <ul {% if section == "Deconnexion" %}class="selected"{% endif %}>
+                    <a href="{% url "logout" %}">Se Déconnecter</a>
+                </ul>
             </ul>
             {% else %}
                 <a>Utilisateur non connecté</a>

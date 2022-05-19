@@ -1,7 +1,8 @@
 header {
     border:3px solid yellow;
     display:flex;
-    justify-content: space-around;
+    justify-content: flex-end;
+    min-height: 70px;
 }
 /* section {
     border: 3px solid white;
@@ -82,21 +83,35 @@ header {
     border: 3px solid blue;
 } */
 
-#header-banner {
-    display: inline-block;
+/* #header-banner {
+    display: inline-flex;
     justify-items: space-between;
     border:3px solid green;
-}
+} */
 
-#main-title {
+/* #main-title {
     display: inline-flex;
     justify-content: right;
-}
+} */
 
 .menu {
-    /* display: inline-flex;  */
-    justify-items: space-between;
-    border:3px solid yellow;
+    display: inline-flex; 
+    width: 500px;
+    justify-content: space-between;
+    /* border:3px solid yellow; */
+    position: relative;
+    right:0px;
+    justify-items: flex-end;
+    padding-right: 300px;
+}
+
+#main-title{
+    position:absolute;
+    right:45%;
+    padding-bottom: 40px;
+    text-align: center;
+    top:-5px;
+    
 }
 
 #main-homepage {
@@ -122,8 +137,20 @@ header {
     position: relative;
     justify-content: center;
     justify-items:center;
-    margin: 10px 10px;
+    padding: 10px;
+    padding-top: 40px;
+    /* margin: 10px 60px; */
 }
+
+#critics-buttons2{
+    width: 280px;
+}
+
+#critics-buttons-wrapper{
+    display: flex;
+    justify-content: space-around;
+}
+
 
 .clearfix::after {
     content: "";
@@ -132,12 +159,12 @@ header {
   }
 
 .ticket{
-    border: 2px dotted black;
+    border: 2px solid black;
     margin: 2px;
 }
 
 .review{
-    border: 2px dotted black;
+    border: 2px solid black;
     margin: 2px;
 }
 
@@ -147,8 +174,6 @@ header {
     flex-wrap: nowrap;
     align-content: center;
     justify-content: center;
-    border: 5px solid purple;
-    
 }
 
 #user-search{
