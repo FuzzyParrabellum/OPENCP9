@@ -1,50 +1,61 @@
 {% extends "Base.html" %}
 
 {% block content %}
-    <h2>Suivre d'autres utilisateurs</h2>
-    <div>
-        <form method="POST">
-            {% csrf_token %}
-            <input id="user-search" type="text" name="user_to_follow" placeholder="Nom D'utilisateur...">
-            <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
-    <h2>Abonnements</h2>
-    <div>
-        <section>
-            <div>
-            {% for user in users %}
-                {% if user in followed_group %}
+    <div id="middleDiv">
+        <div>
+            <section class="widthAbonnements">
+                <h2 class="aligned-h2">Suivre d'autres utilisateurs</h2>
+                
+                <div>
                     <form method="POST">
                         {% csrf_token %}
-                        <input type="hidden" name="user_to_unfollow" value="{{user.id}}" readonly/>
+                        <input id="user-search" type="text" name="user_to_follow" placeholder="Nom D'utilisateur...">
                         <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
-                        <p class="divAbonnements">{{user.username}}<button type="submit">Se Désabonner</button></p> 
+                        <button type="submit">Envoyer</button>
                     </form>
-                {% endif %}
-                <!-- le if ci-dessus permet d'éviter que notre user actuel apparaisse dans la liste -->
-                <!-- en cliquant sur ce bouton la page se recharge avec 
-                ce nouvel utilisateur que notre utilisateur actuel suit -->
-                <!-- peut ici intégrer la logique que si le request.user follow déjà cet utilisateur,alors le bouton
-                indiquera plutôt "se désabonner" -->
-                <!-- également intégrer logique de défilement des utilisateurs quand il y en a plus de 10 si peux -->
-            {% endfor %}
-            </div>
-        </section>
-        <!-- <div>
-            <h1>Section test user_to</h1>
-            {% for subscriber_test in user_to %}
-                <p>{{subscriber_test.followed_user}}</p>
-            {% endfor %}
-            <p>{{touche}}</p>
-        </div> -->
-    <h2>Abonnés</h2>
-    <div>
-        {% for subscriber_test in to_user %}
-                <p class="divAbonnements">{{subscriber_test.user}}</p>
-            {% endfor %}
-    </div>
-        <!-- {{ request.user.username }} -->
+                </div>
+            </section>
+            <section>
+                <h2 class="aligned-h2">Abonnements</h2>
+                <div>
+                    <section>
+                        <div id="aboButtonWrapper">
+                        {% for user in users %}
+                            {% if user in followed_group %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_to_unfollow" value="{{user.id}}" readonly/>
+                                    <input type="hidden" name="current_user" value="{{request.user.id}}" readonly/>
+                                    <p class="divAbonnements">{{user.username}}<button id="aboButton" type="submit">Se Désabonner</button></p> 
+                                </form>
+                            {% endif %}
+                            <!-- le if ci-dessus permet d'éviter que notre user actuel apparaisse dans la liste -->
+                            <!-- en cliquant sur ce bouton la page se recharge avec 
+                            ce nouvel utilisateur que notre utilisateur actuel suit -->
+                            <!-- peut ici intégrer la logique que si le request.user follow déjà cet utilisateur,alors le bouton
+                            indiquera plutôt "se désabonner" -->
+                            <!-- également intégrer logique de défilement des utilisateurs quand il y en a plus de 10 si peux -->
+                        {% endfor %}
+                        </div>
+                    </section>
+                    <!-- <div>
+                        <h1>Section test user_to</h1>
+                        {% for subscriber_test in user_to %}
+                            <p>{{subscriber_test.followed_user}}</p>
+                        {% endfor %}
+                        <p>{{touche}}</p>
+                    </div> -->
+            </section>
+            <section>
+                <h2 class="aligned-h2">Abonnés</h2>
+                <div>
+                    {% for subscriber_test in to_user %}
+                            <p class="divAbonnements">{{subscriber_test.user}}</p>
+                        {% endfor %}
+                </div>
+                <!-- {{ request.user.username }} -->
+            </section>
+            
+        </div>
     </div>
 {% endblock %}
