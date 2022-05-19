@@ -2,8 +2,10 @@
 
 {% block content %}
     
-    <h2>Reviews et Critiques personnelles</h2>
+    <div id="main-homepage">
+    
     <div>
+        <h2 class="aligned-h2">Reviews et Critiques personnelles</h2>
         {% for post in posts %}
             {% if post.content_type == 'TICKET' %}
                 <div class="ticket">
@@ -48,5 +50,6 @@
             
             
         {% endfor %}
+    </div>
     </div>
 {% endblock %}
